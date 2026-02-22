@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+
+<style>
+    .contact-header {
+        background: #343a32;
+        color: white;
+        padding: 60px 0;
+        text-align: center;
+    }
+
+    .contact-card {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border-radius: 0;
+    }
+
+    .info-box {
+        background-color: #fdfcf9;
+        padding: 40px;
+        height: 100%;
+        border-left: 4px solid var(--gold);
+    }
+
+    .contact-icon {
+        color: var(--gold);
+        font-size: 1.5rem;
+        margin-right: 15px;
+    }
+
+    .form-control {
+        border-radius: 0;
+        padding: 12px;
+        border: 1px solid #eee;
+    }
+
+        .form-control:focus {
+            border-color: var(--gold);
+            box-shadow: none;
+        }
+</style>
+
+<header class="contact-header">
+    <div class="container">
+        <h1 class="serif display-4">Contact</h1>
+        <p class="lead">Heeft u vragen? Wij staan u graag te woord.</p>
+    </div>
+</header>
+
+<div class="container my-5 py-5">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <div class="card contact-card p-4 p-md-5">
+                <h3 class="serif mb-4">Stuur ons een bericht</h3>
+                <form id="contactForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Naam</label>
+                            <input type="text" class="form-control" placeholder="Uw naam" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">E-mailadres</label>
+                            <input type="email" class="form-control" placeholder="Uw e-mailadres" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Onderwerp</label>
+                            <select class="form-select form-control">
+                                <option>Vraag over verblijf</option>
+                                <option>Reservering wijzigen</option>
+                                <option>Overig</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Uw bericht</label>
+                            <textarea class="form-control" rows="5" placeholder="Wat kunnen wij voor u betekenen?" required></textarea>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-dark w-100 rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 2px;">Bericht Verzenden</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="info-box">
+                <h3 class="serif mb-4">Onze Gegevens</h3>
+
+                <div class="d-flex mb-4">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Adres</h6>
+                        <p class="text-muted small">Domaine Le Marconnès<br>43580 Alleyras, Frankrijk</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <div class="contact-icon">📞</div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Telefoon</h6>
+                        <p class="text-muted small">+33 (0)4 71 57 57 57</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <div class="contact-icon">✉️</div>
+                    <div>
+                        <h6 class="fw-bold mb-1">E-mail</h6>
+                        <p class="text-muted small">info@lemarconnes.com</p>
+                    </div>
+                </div>
+
+                <hr class="my-4" style="border-color: #eee;">
+
+                <h6 class="fw-bold mb-3 serif">Routebeschrijving</h6>
+                <p class="text-muted small">
+                    Ons domein is gelegen in het hart van de Haute-Loire. Wij raden aan om met de auto te komen om de prachtige omgeving optimaal te kunnen verkennen.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Bedankt voor uw bericht! Omdat dit een eigen script is zonder WordPress, kunnen we dit later koppelen aan een echte e-mail service.');
+        });
+    </script>
+}

@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Welkom";
+}
+
+<style>
+    .home-hero {
+        height: 50vh;
+        background: #343a32;
+        background-color: #343a32;
+        padding: 60px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 4rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+    }
+
+    .feature-box {
+        padding: 40px;
+        background: white;
+        transition: 0.3s;
+        height: 100%;
+        border: 1px solid #f1f1f1;
+    }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+    .btn-gold {
+        border: 1px solid #c0a97a;
+        color: #c0a97a;
+        border-radius: 0;
+        padding: 12px 30px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+        .btn-gold:hover {
+            background: #c0a97a;
+            color: white;
+        }
+</style>
+
+<header class="home-hero">
+    <div class="container">
+        <h1 class="hero-title">Le Marconnès</h1>
+        <p class="lead mb-4">Ontdek de rust van het Franse platteland.</p>
+        <a href="/Accommodations" class="btn btn-outline-light btn-lg rounded-0 px-5 text-uppercase">Bekijk ons aanbod</a>
+    </div>
+</header>
+
+<section class="py-5 bg-white text-center">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <h2 class="serif display-5">Een uniek verblijf</h2>
+                <div style="width: 60px; height: 2px; background: #c0a97a; margin: 20px auto;"></div>
+                <p class="text-muted">Welkom bij Domaine Le Marconnès. Geniet van onze zorgvuldig gerestaureerde gîtes en luxe hotelkamers midden in de natuur.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="fs-1 mb-3">🌿</div>
+                    <h4 class="serif">Natuur</h4>
+                    <p class="text-muted small">Prachtige wandelroutes direct vanaf het domein.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="fs-1 mb-3">🏰</div>
+                    <h4 class="serif">Historie</h4>
+                    <p class="text-muted small">Authentieke gebouwen met modern comfort.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="fs-1 mb-3">🍷</div>
+                    <h4 class="serif">Gastvrijheid</h4>
+                    <p class="text-muted small">Een warm welkom in de prachtige Haute-Loire.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <a href="/Test" class="btn btn-gold">Boek uw verblijf</a>
+        </div>
+    </div>
+</section>

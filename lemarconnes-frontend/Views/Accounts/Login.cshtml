@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Admin Login - LeMarconnes";
+    Layout = "_Layout";
+}
+
+<style>
+    .login-container {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fdfcf9;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 400px;
+        padding: 40px;
+        background: white;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .login-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    .form-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+    }
+
+    .form-control {
+        border-radius: 0;
+        border: 1px solid #eee;
+        padding: 12px;
+    }
+
+        .form-control:focus {
+            border-color: #c5a059;
+            box-shadow: none;
+        }
+
+    .btn-login {
+        width: 100%;
+        background-color: #333;
+        color: white;
+        border-radius: 0;
+        padding: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border: none;
+        margin-top: 20px;
+        transition: 0.3s;
+    }
+
+        .btn-login:hover {
+            background-color: #c5a059;
+        }
+
+    /* De foutmelding balk */
+    .error-alert {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        border-left: 4px solid #d9534f;
+        text-align: center;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <h2 class="login-title">Inloggen</h2>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error-alert">
+                @ViewBag.Error
+            </div>
+        }
+
+        <form method="post" asp-action="Login" asp-controller="Accounts">
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mailadres</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="bijv. marc@lemarconnes.com" required autofocus>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Wachtwoord</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-login">Inloggen</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="/" class="text-muted small text-decoration-none" style="font-size: 13px;">
+                ← Terug naar de website
+            </a>
+        </div>
+    </div>
+</div>

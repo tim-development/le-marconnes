@@ -1,0 +1,72 @@
+﻿@using LeMarconnes.DTOs.Admin
+@model AdminReservationDto
+@{
+    ViewData["Title"] = "Reservering Verwijderen - LeMarconnes";
+    Layout = "_Layout";
+
+    // Berekeningen voor de samenvatting
+    var nachten = (Model.CheckOutDate - Model.CheckInDate).Days;
+    if (nachten <= 0) nachten = 1;
+
+    decimal prijsPerNacht = Model.Accommodation?.RatePerNight ?? 0;
+    decimal verblijfskosten = nachten * prijsPerNacht;
+    decimal totaal = verblijfskosten + Model.TouristTax - Model.Discount;
+}
+
+<div class="container my-5 text-center" style="max-width: 700px;">
+    <div class="card border-0 shadow-lg rounded-0 p-5">
+        <div class="mb-4">
+            <i class="bi bi-exclamation-octagon-fill text-danger" style="font-size: 4rem;"></i>
+        </div>
+
+        <h2 class="serif mb-3">Reservering annuleren?</h2>
+
+        <div class="alert alert-light border rounded-0 mb-4 text-start">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="mb-1 text-muted small text-uppercase">Reservering ID</p>
+                    <h5 class="text-dark">#@Model.Id</h5>
+                </div>
+                <div class="col-sm-6 text-sm-end">
+                    <p class="mb-1 text-muted small text-uppercase">Status</p>
+                    <span class="badge bg-dark rounded-0">@(Model.Status?.Name ?? "Onbekend")</span>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-12">
+                    <p class="mb-1 text-muted small text-uppercase">Accommodatie & Periode</p>
+                    <p class="mb-0 fw-bold">@(Model.Accommodation?.Name ?? "Onbekende accommodatie")</p>
+                    <p class="mb-0 text-muted small">
+                        @Model.CheckInDate.ToString("dd MMM yyyy") tot @Model.CheckOutDate.ToString("dd MMM yyyy") (@nachten nachten)
+                    </p>
+                </div>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted small text-uppercase">Totaalbedrag</span>
+                <span class="fw-bold text-primary fs-5">€@totaal.ToString("N2")</span>
+            </div>
+        </div>
+
+        <p class="text-muted mb-4 small">
+            Door deze reservering te verwijderen, wordt deze definitief gewist uit het systeem van <strong>LeMarconnes</strong>.
+            Deze actie kan niet ongedaan worden gemaakt.
+        </p>
+
+        @* Het formulier wijst naar de Delete actie in ReservationsController *@
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/Admins/Reservations" class="btn btn-outline-dark rounded-0 px-4">
+                    <i class="bi bi-arrow-left me-2"></i>Terug
+                </a>
+
+                <button type="submit" class="btn btn-danger rounded-0 px-4 shadow-sm">
+                    <i class="bi bi-trash3 me-2"></i>Definitief Verwijderen
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

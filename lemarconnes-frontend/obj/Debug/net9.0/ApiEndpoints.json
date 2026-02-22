@@ -1,0 +1,369 @@
+[
+  {
+    "ContainingType": "LeMarconnes.Controllers.AccountsController",
+    "Method": "Index",
+    "RelativePath": "Accounts/Index",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.AccommodationsController",
+    "Method": "Index",
+    "RelativePath": "Admins/Accommodations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filter",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.AccommodationsController",
+    "Method": "Create",
+    "RelativePath": "Admins/Accommodations/Create",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.AccommodationsController",
+    "Method": "Create",
+    "RelativePath": "Admins/Accommodations/Create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Capacity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "RatePerNight",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "SelectedType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoomNumber",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PrivateBathroom",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "EntireProperty",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "Garden",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "ParkingAvailable",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "BedTypes",
+        "Type": "System.Collections.Generic.List\u00601[[LeMarconnes.Models.BedSelectionItem, LeMarconnes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.AccommodationsController",
+    "Method": "Delete",
+    "RelativePath": "Admins/Accommodations/Delete/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.AccommodationsController",
+    "Method": "DeleteConfirmed",
+    "RelativePath": "Admins/Accommodations/Delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.AccommodationsController",
+    "Method": "Details",
+    "RelativePath": "Admins/Accommodations/Details/{id}",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.AccommodationsController",
+    "Method": "Edit",
+    "RelativePath": "Admins/Accommodations/Edit/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.AccommodationsController",
+    "Method": "Edit",
+    "RelativePath": "Admins/Accommodations/Edit/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Capacity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "RatePerNight",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "SelectedType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RoomNumber",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PrivateBathroom",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "EntireProperty",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "Garden",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "ParkingAvailable",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "BedTypes",
+        "Type": "System.Collections.Generic.List\u00601[[LeMarconnes.Models.BedSelectionItem, LeMarconnes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.AccountsController",
+    "Method": "Index",
+    "RelativePath": "Admins/Index",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.ReservationsController",
+    "Method": "Index",
+    "RelativePath": "Admins/Reservations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filter",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.ReservationsController",
+    "Method": "Delete",
+    "RelativePath": "Admins/Reservations/Delete/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.ReservationsController",
+    "Method": "DeleteConfirmed",
+    "RelativePath": "Admins/Reservations/Delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.Admin.ReservationsController",
+    "Method": "Details",
+    "RelativePath": "Admins/Reservations/Details/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.AccountsController",
+    "Method": "CreateUser",
+    "RelativePath": "Admins/Users/Create",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LeMarconnes.Controllers.AccountsController",
+    "Method": "CreateUser",
+    "RelativePath": "Admins/Users/Create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "phoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "address",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "isAdmin",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

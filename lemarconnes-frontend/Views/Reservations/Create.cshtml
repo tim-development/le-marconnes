@@ -1,0 +1,265 @@
+﻿@model LeMarconnes.Models.ReservationCreateViewModel
+@using System.Globalization
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Reserveren - LeMarconnes";
+}
+
+<style>
+    /* HARD BLOCKS: Echt bezette datums uit de database */
+    .flatpickr-day.flatpickr-disabled,
+    .flatpickr-day.flatpickr-disabled:hover {
+        background: #f8d7da !important;
+        color: #721c24 !important;
+        text-decoration: line-through;
+        cursor: not-allowed;
+        border: none !important;
+    }
+
+    /* SOFT BLOCKS: Dagen die niet kunnen als aankomstdatum (bijv. te kort voor een weekend) */
+    .overlap-blocked {
+        background: #fff3cd !important;
+        color: #856404 !important;
+        cursor: not-allowed !important;
+        border-radius: 5px;
+        opacity: 0.8;
+    }
+
+    .border-gold {
+        border: 1px solid #c5a059;
+    }
+
+    .text-gold {
+        color: #c5a059;
+    }
+
+    .payment-card {
+        border-left: 5px solid #c5a059;
+        background-color: #fcfaf5;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div id="dateError" class="alert alert-danger d-none mb-3 shadow-sm">
+                <i class="fas fa-calendar-times me-2"></i>
+                De geselecteerde periode is niet beschikbaar.
+            </div>
+
+            <div class="card shadow-lg border-0 rounded-lg overflow-hidden">
+                <div class="card-header bg-dark text-white p-4 text-center">
+                    <h2 class="playfair" style="color: #c5a059;">Boek uw verblijf</h2>
+                    <p class="mb-0 text-uppercase small" style="letter-spacing: 2px;">@Model.AccommodationName</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" id="reservationForm">
+                        @Html.AntiForgeryToken()
+
+                        @* Hidden velden voor de API *@
+                        <input type="hidden" name="AccommodationId" value="@Model.AccommodationId" />
+                        <input type="hidden" name="UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+                        <input type="hidden" name="Discount" value="0" />
+                        <input type="hidden" name="Status" value="1" />
+                        <input type="hidden" id="checkinIso" name="CheckInDate" />
+                        <input type="hidden" id="checkoutIso" name="CheckOutDate" />
+
+                        @* JS Helpers - Cruciaal: Html.Raw voorkomt dat JSON crasht *@
+                        <input type="hidden" id="rate" value="@Model.RatePerNight.ToString("F2", CultureInfo.InvariantCulture)" />
+                        <input type="hidden" id="baseTax" value="@Model.TouristTax.ToString("F2", CultureInfo.InvariantCulture)" />
+                        <input type="hidden" id="blockedDates" value='@Html.Raw(Model.BlockedDatesJson ?? "[]")' />
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Verblijfsduur</label>
+                                <select id="duration" class="form-select border-gold shadow-sm">
+                                    <option value="3">Lang Weekend (3 nachten)</option>
+                                    <option value="4">Midweek (4 nachten)</option>
+                                    <option value="7">Week (7 nachten)</option>
+                                    <option value="14">2 Weken (14 nachten)</option>
+                                    <option value="21">3 Weken (21 nachten)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Aantal gasten</label>
+                                <input name="NumberOfGuests" id="guests" class="form-control shadow-sm" type="number" min="1" max="@Model.MaxCapacity" value="1" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Aankomstdatum</label>
+                                <input id="checkin" type="text" class="form-control bg-white border-gold shadow-sm" readonly placeholder="Kies uw aankomst" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Vertrekdatum</label>
+                                <input id="checkout" type="text" class="form-control bg-light shadow-sm" readonly placeholder="Automatisch berekend" />
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="card payment-card mb-4 shadow-sm">
+                            <div class="card-body">
+                                <label class="form-label fw-bold mb-3"><i class="fas fa-wallet me-2"></i>Betalingsplan</label>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="paymentPlan" id="payFull" value="full" checked>
+                                    <label class="form-check-label fw-bold" for="payFull">In één keer betalen (100%)</label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="paymentPlan" id="paySplit" value="split">
+                                    <label class="form-check-label fw-bold" for="paySplit">Gesplitst betalen (Nu 50% aanbetaling)</label>
+                                </div>
+
+                                <div id="paymentSummary" class="bg-white p-3 rounded border">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="text-muted">Toeristenbelasting (totaal):</span>
+                                        <span id="taxTotalDisplay">€ 0,00</span>
+                                        <input type="hidden" name="TouristTax" id="taxHiddenValue" />
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="h5">Totaalprijs:</span>
+                                        <span id="totalDisplay" class="h5 text-gold fw-bold">€ 0,00</span>
+                                    </div>
+                                    <div class="pt-2 border-top">
+                                        <div class="d-flex justify-content-between text-success fw-bold">
+                                            <span>Nu te betalen:</span>
+                                            <span id="dueNow">€ 0,00</span>
+                                        </div>
+                                        <div id="dueLaterRow" class="d-flex justify-content-between text-muted small d-none">
+                                            <span>Resterend bedrag (later):</span>
+                                            <span id="dueLater">€ 0,00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="btn btn-lg w-100 text-white py-3 shadow-lg text-uppercase fw-bold" style="background-color: #c5a059; letter-spacing: 1px;" disabled>
+                            Bevestig en Reserveer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Elementen
+            const durationSelect = document.getElementById("duration");
+            const guestsInput = document.getElementById("guests");
+            const submitBtn = document.getElementById("submitBtn");
+            const errorDiv = document.getElementById("dateError");
+
+            // Parsing van geblokkeerde data
+            let blocked = [];
+            try {
+                blocked = JSON.parse(document.getElementById("blockedDates").value || "[]");
+            } catch (e) {
+                console.error("Fout bij parsing blockedDates:", e);
+            }
+
+            const getFloat = (id) => parseFloat(document.getElementById(id).value.replace(',', '.')) || 0;
+            const formatEuro = (val) => "€ " + val.toFixed(2).replace('.', ',');
+
+            const toISO = (date) => {
+                if (!date) return "";
+                const offset = date.getTimezoneOffset();
+                const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+                return localDate.toISOString().split('T')[0] + "T00:00:00";
+            };
+
+            const rate = getFloat("rate");
+            const baseTax = getFloat("baseTax");
+
+            function isInvalidArrival(date) {
+                if (!date) return false;
+                const dur = parseInt(durationSelect.value);
+
+                for (let i = 0; i < dur; i++) {
+                    let checkDate = new Date(date);
+                    checkDate.setDate(checkDate.getDate() + i);
+                    let checkStr = checkDate.toISOString().split('T')[0];
+                    if (blocked.includes(checkStr)) return true;
+                }
+                return false;
+            }
+
+            const fpIn = flatpickr("#checkin", {
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                disable: [isInvalidArrival],
+                onChange: function(selectedDates) {
+                    if (selectedDates[0]) {
+                        const dur = parseInt(durationSelect.value);
+                        let outDate = new Date(selectedDates[0]);
+                        outDate.setDate(outDate.getDate() + dur);
+                        fpOut.setDate(outDate);
+
+                        document.getElementById("checkinIso").value = toISO(selectedDates[0]);
+                        document.getElementById("checkoutIso").value = toISO(outDate);
+                    }
+                    calculate();
+                },
+                onDayCreate: (dObj, dStr, fp, dayElem) => {
+                    const dateStr = dayElem.dateObj.toISOString().split('T')[0];
+                    if (isInvalidArrival(dayElem.dateObj) && !blocked.includes(dateStr)) {
+                        dayElem.classList.add("overlap-blocked");
+                    }
+                }
+            });
+
+            const fpOut = flatpickr("#checkout", { dateFormat: "Y-m-d", clickOpens: false });
+
+            function calculate() {
+                const start = fpIn.selectedDates[0];
+                const end = fpOut.selectedDates[0];
+                const guests = parseInt(guestsInput.value) || 1;
+                const paymentPlan = document.querySelector('input[name="paymentPlan"]:checked').value;
+
+                if (start && end && end > start) {
+                    const nights = Math.round((end - start) / (1000 * 60 * 60 * 24));
+                    const totalTax = nights * (guests * baseTax);
+                    const totalAcc = nights * rate;
+                    const grandTotal = totalAcc + totalTax;
+
+                    document.getElementById("taxTotalDisplay").innerText = formatEuro(totalTax);
+                    document.getElementById("taxHiddenValue").value = (guests * baseTax).toFixed(2);
+                    document.getElementById("totalDisplay").innerText = formatEuro(grandTotal);
+
+                    if (paymentPlan === "split") {
+                        const half = grandTotal / 2;
+                        document.getElementById("dueNow").innerText = formatEuro(half);
+                        document.getElementById("dueLater").innerText = formatEuro(half);
+                        document.getElementById("dueLaterRow").classList.remove("d-none");
+                    } else {
+                        document.getElementById("dueNow").innerText = formatEuro(grandTotal);
+                        document.getElementById("dueLaterRow").classList.add("d-none");
+                    }
+
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                }
+            }
+
+            durationSelect.addEventListener("change", () => {
+                fpIn.clear();
+                fpOut.clear();
+                calculate();
+            });
+
+            guestsInput.addEventListener("input", calculate);
+            document.querySelectorAll('input[name="paymentPlan"]').forEach(r => {
+                r.addEventListener("change", calculate);
+            });
+        });
+    </script>
+}

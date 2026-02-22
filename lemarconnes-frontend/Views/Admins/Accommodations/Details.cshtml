@@ -1,0 +1,145 @@
+﻿@model LeMarconnes.Models.AccommodationDetailViewModel
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Details - " + Model.Name;
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Accommodaties</a></li>
+            <li class="breadcrumb-item active">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-5 mb-0">@(string.IsNullOrEmpty(Model.Name) ? "[Geen Naam Geladen]" : Model.Name)</h1>
+            <span class="badge @(Model.IsGite ? "bg-primary" : "bg-info") fs-6 mt-2">
+                <i class="bi @(Model.IsGite ? "bi-house-heart" : "bi-building") me-1"></i>
+                @(Model.IsGite ? "Gite" : "Hotelkamer")
+            </span>
+        </div>
+        <div class="btn-group">
+            <a href="/Admins/Accommodations/Edit/@Model.Id" class="btn btn-warning">
+                <i class="bi bi-pencil-square me-1"></i> Bewerken
+            </a>
+            <a href="/Admins/Accommodations" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Terug
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted mb-3 uppercase small fw-bold">Beschrijving</h5>
+                    <p class="lead" style="white-space: pre-line;">@Model.Description</p>
+                    <hr class="my-4" />
+                    <div class="row text-center py-2">
+                        <div class="col-4 border-end">
+                            <i class="bi bi-people text-primary fs-2"></i>
+                            <h6 class="mt-2 mb-0">Capaciteit</h6>
+                            <p class="text-muted">@Model.Capacity Personen</p>
+                        </div>
+                        <div class="col-4 @(Model.IsHotelRoom ? "border-end" : "")">
+                            <i class="bi bi-tag text-success fs-2"></i>
+                            <h6 class="mt-2 mb-0">Prijs</h6>
+                            <p class="text-muted">€@Model.RatePerNight <small>/ nacht</small></p>
+                        </div>
+                        @if (Model.IsHotelRoom)
+                        {
+                            <div class="col-4">
+                                <i class="bi bi-door-open text-info fs-2"></i>
+                                <h6 class="mt-2 mb-0">Kamernummer</h6>
+                                <p class="text-muted">@Model.RoomNumber</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 text-secondary"><i class="bi bi-moon-stars me-2"></i>Slaapgelegenheid</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @if (Model.AccommodationBeds != null && Model.AccommodationBeds.Any())
+                        {
+                            @foreach (var item in Model.AccommodationBeds)
+                            {
+                                <div class="col-sm-6 mb-3">
+                                    <div class="p-3 border rounded d-flex align-items-center bg-light">
+                                        <i class="bi bi-bed-front fs-3 me-3 text-secondary"></i>
+                                        <div>
+                                            <div class="fw-bold">@(item.Bed?.Type ?? "Onbekend bed")</div>
+                                            <div class="small text-muted">Aantal: @item.Quantity</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-12 text-muted italic">Geen bedden geconfigureerd.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0">Faciliteiten</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        @if (Model.IsGite)
+                        {
+                            @* 1. Gehele woning *@
+                            @if (Model.EntireProperty)
+                            {
+                                <li class="mb-3 d-flex align-items-center">
+                                    <i class="bi bi-check-lg text-success fs-5 me-3"></i>
+                                    <span>Gehele woning</span>
+                                </li>
+                            }
+
+                            @* 2. Privé tuin *@
+                            @if (Model.Garden)
+                            {
+                                <li class="mb-3 d-flex align-items-center">
+                                    <i class="bi bi-check-lg text-success fs-5 me-3"></i>
+                                    <span>Privé tuin</span>
+                                </li>
+                            }
+
+                            @* 3. Parkeren *@
+                            @if (Model.ParkingAvailable)
+                            {
+                                <li class="mb-3 d-flex align-items-center">
+                                    <i class="bi bi-check-lg text-success fs-5 me-3"></i>
+                                    <span>Parkeren bij accommodatie</span>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            @if (Model.PrivateBathroom)
+                            {
+                                <li class="mb-3 d-flex align-items-center">
+                                    <i class="bi bi-check-lg text-success fs-5 me-3"></i>
+                                    <span>Eigen badkamer</span>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

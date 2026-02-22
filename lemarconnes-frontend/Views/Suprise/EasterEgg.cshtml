@@ -1,0 +1,192 @@
+﻿@{
+    ViewData["Title"] = "Credits - Les Codeurs de Marconnes";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a0a;
+            color: #c5a059;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .credits-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .role {
+            font-size: 1rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            opacity: 0.6;
+            margin-bottom: 5px;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .name {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(to bottom, #f1d39b 22%, #c5a059 50%, #f1d39b 78%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: opacity 1s ease-in-out;
+            min-height: 4rem;
+        }
+
+        .fade-out {
+            opacity: 0 !important;
+        }
+
+        .btn-exit {
+            position: absolute;
+            bottom: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 35px;
+            border: 1px solid #c5a059;
+            color: #c5a059;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.7rem;
+            transition: all 1s ease;
+            opacity: 0;
+        }
+
+            .btn-exit.show {
+                opacity: 1;
+                bottom: -100px;
+            }
+
+            .btn-exit:hover {
+                background: #c5a059;
+                color: #000;
+                box-shadow: 0 0 20px rgba(197, 160, 89, 0.5);
+            }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="credits-container">
+        <div id="credit-box">
+            <div id="role-display" class="role">We proudly present</div>
+            <h1 id="name-display" class="name">Les Codeurs de Marconnes!</h1>
+        </div>
+        <a href="/Admins/Index" id="exit-btn" class="btn-exit">Return to Dashboard</a>
+    </div>
+
+    <script>
+        const credits = [
+            { role: "Opdrachtgever", name: "Miel Noelanders" },
+            { role: "Projectleider", name: "Maarten Boegheim" },
+            { role: "API Design Camping", name: "Yusuf & Abdulrahim Isaag" },
+            { role: "API Design Hotel & Gite", name: "Maarten & Tim Boegheim" },
+            { role: "Frontend Design & API koppeling", name: "Maarten Boegheim" },
+            { role: "Beveiliging", name: "Tim Boegheim" },
+            { role: "Kwaliteitscontroleur", name: "Yusuf Isaag" },
+            { role: "Notulist / Documentatie", name: "Abdulrahim Isaag" },
+            { role: "Project", name: "LeMarconnes 2026" },
+            { role: "", name: "Bedankt voor het bezoeken van onze site!" }
+        ];
+
+        let currentIndex = 0;
+        const roleEl = document.getElementById('role-display');
+        const nameEl = document.getElementById('name-display');
+        const exitBtn = document.getElementById('exit-btn');
+
+        function nextCredit() {
+            if (currentIndex < credits.length) {
+                // Fade out
+                roleEl.classList.add('fade-out');
+                nameEl.classList.add('fade-out');
+
+                setTimeout(() => {
+                    const item = credits[currentIndex];
+                    roleEl.innerText = item.role;
+                    nameEl.innerText = item.name;
+
+                    // Fade in
+                    roleEl.classList.remove('fade-out');
+                    nameEl.classList.remove('fade-out');
+
+                    currentIndex++;
+
+                    // Als dit de laatste is, stop de loop en toon de knop
+                    if (currentIndex === credits.length) {
+                        exitBtn.classList.add('show');
+                    } else {
+                        setTimeout(nextCredit, 3500);
+                    }
+                }, 1000);
+            }
+        }
+
+        setTimeout(nextCredit, 2000);
+
+        // --- Sterrenveld Achtergrond ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random();
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0 || this.y > canvas.height || this.y < 0) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(197, 160, 89, ${this.opacity})`;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 150; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

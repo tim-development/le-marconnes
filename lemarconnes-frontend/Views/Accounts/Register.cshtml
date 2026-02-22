@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Registreren - LeMarconnes";
+    Layout = "_Layout";
+}
+
+<style>
+    .register-card {
+        max-width: 600px;
+        margin: 50px auto;
+        background: white;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .form-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #777;
+    }
+
+    .form-control {
+        border-radius: 0;
+        border: 1px solid #e0e0e0;
+        padding: 10px 15px;
+    }
+
+        .form-control:focus {
+            border-color: #c5a059;
+            box-shadow: none;
+        }
+
+    .btn-register {
+        background-color: #333;
+        color: white;
+        border-radius: 0;
+        padding: 12px 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+        transition: 0.3s;
+    }
+
+        .btn-register:hover {
+            background-color: #c5a059;
+        }
+</style>
+
+<div class="container">
+    <div class="register-card">
+        <h2 class="serif mb-2 text-center">Account Aanmaken</h2>
+        <p class="text-center text-muted mb-4 small">Word lid van de LeMarconnes community</p>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger rounded-0 small">@ViewBag.Error</div>
+        }
+
+        <form method="post" asp-action="Register" asp-controller="Accounts">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Volledige Naam</label>
+                    <input type="text" name="name" class="form-control" placeholder="bijv. Sophie de Vries" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">E-mailadres</label>
+                    <input type="email" name="email" class="form-control" placeholder="naam@voorbeeld.nl" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Wachtwoord</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Telefoonnummer</label>
+                    <input type="text" name="phoneNumber" class="form-control" placeholder="+31 6 12345678">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Adres</label>
+                    <input type="text" name="address" class="form-control" placeholder="Straat en woonplaats">
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-register w-100 mb-3">Registreren</button>
+                <p class="small text-muted">Heeft u al een account? <a href="/Accounts/Login" class="text-dark fw-bold text-decoration-none">Log hier in</a></p>
+            </div>
+        </form>
+    </div>
+</div>

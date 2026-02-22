@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Toegang Geweigerd";
+}
+
+<style>
+    .forbidden-container {
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .error-code {
+        font-family: 'Playfair Display', serif;
+        font-size: 8rem;
+        color: #eee;
+        line-height: 1;
+        margin-bottom: -2rem;
+    }
+
+    .forbidden-card {
+        padding: 40px;
+        max-width: 500px;
+    }
+
+    .forbidden-icon {
+        font-size: 3rem;
+        color: var(--gold);
+        margin-bottom: 20px;
+    }
+
+    .btn-return {
+        background-color: var(--dark);
+        color: white;
+        border-radius: 0;
+        padding: 12px 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        .btn-return:hover {
+            background-color: var(--gold);
+            color: white;
+        }
+</style>
+
+<div class="forbidden-container">
+    <div class="forbidden-card">
+        <div class="error-code">403</div>
+        <div class="forbidden-icon">🔒</div>
+        <h1 class="serif mb-3">Toegang Geweigerd</h1>
+        <p class="text-muted mb-4">
+            U heeft geen toestemming om deze pagina op <strong>LeMarconnes</strong> te bekijken.
+            Deze sectie is uitsluitend gereserveerd voor geautoriseerde beheerders.
+        </p>
+        <div class="mt-4">
+            <a href="/" class="btn-return">Terug naar de website</a>
+        </div>
+    </div>
+</div>

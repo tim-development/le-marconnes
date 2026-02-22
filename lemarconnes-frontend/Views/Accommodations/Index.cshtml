@@ -1,0 +1,118 @@
+﻿@model List<LeMarconnes.DTOs.AccommodationDto>
+@{
+    ViewData["Title"] = "Onze Accommodaties";
+}
+
+<style>
+    .hero-section {
+        height: 50vh;
+        background: #343a32;
+        padding: 60px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+    }
+
+    .filter-card {
+        margin-top: -40px;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-radius: 0;
+    }
+
+    .acc-card {
+        transition: transform 0.3s;
+        border: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        height: 100%;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .acc-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .btn-gold {
+        background-color: #c0a97a;
+        color: white;
+        border: none;
+        border-radius: 0;
+        padding: 12px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        margin-top: auto;
+    }
+
+        .btn-gold:hover {
+            background-color: #ac9669;
+            color: white;
+        }
+
+    .img-placeholder {
+        background: #f8f9fa;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="serif display-4">Onze Accommodaties</h1>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card filter-card p-3 text-center">
+                <form method="get" id="filterForm" class="d-flex align-items-center justify-content-center">
+                    <label class="me-3 fw-bold text-uppercase small text-muted">Filter op type:</label>
+                    <select name="filter" id="typeFilter" class="form-select w-auto" onchange="this.form.submit()">
+                        <option value="">Alle accommodaties</option>
+                        <option value="gite" @(ViewBag.CurrentFilter == "gite" ? "selected" : "")>Gîtes</option>
+                        <option value="hotel" @(ViewBag.CurrentFilter == "hotel" ? "selected" : "")>Hotelkamers</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="acc-container" class="row g-4 py-5">
+        @if (Model == null || !Model.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Geen accommodaties gevonden voor deze selectie.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card acc-card">
+                        <div class="img-placeholder">
+                            <img src="/img/logo.png" style="max-height: 80px; opacity: 0.3;" alt="Le Marconnès">
+                        </div>
+                        <div class="card-body">
+                            <small class="text-uppercase fw-bold text-muted mb-2 d-block" style="color: #c0a97a !important;">
+                                @item.Capacity Personen
+                            </small>
+                            <h5 class="card-title serif h4">@item.Name</h5>
+                            <p class="card-text text-muted small">@item.Description</p>
+                        </div>
+                        <a href="/Accommodations/Details/@item.Id" class="btn btn-gold text-uppercase">
+                            Bekijk Details
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

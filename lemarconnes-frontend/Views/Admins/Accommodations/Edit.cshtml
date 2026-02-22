@@ -1,0 +1,102 @@
+﻿@model LeMarconnes.Models.AccommodationEditViewModel
+
+<div class="container mt-4">
+    <h2>@Model.Name Bewerken</h2>
+    <hr />
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <input type="hidden" name="SelectedType" value="@Model.SelectedType" />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Naam Accommodatie</label>
+                    <input type="text" name="Name" value="@Model.Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Beschrijving</label>
+                    <textarea name="Description" class="form-control" rows="4">@Model.Description</textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Capaciteit</label>
+                        <input type="number" name="Capacity" value="@Model.Capacity" class="form-control" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Prijs per nacht</label>
+                        <input type="number" step="0.01" name="RatePerNight" value="@Model.RatePerNight.ToString(System.Globalization.CultureInfo.InvariantCulture)" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                @if (Model.SelectedType == "hotel")
+                {
+                    <h5>Hotelkamer Opties</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Kamernummer</label>
+                        <input type="number" name="RoomNumber" value="@Model.RoomNumber" class="form-control" />
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="PrivateBathroom" value="true" class="form-check-input" @(Model.PrivateBathroom ? "checked" : "") />
+                        <label class="form-check-label">Eigen Badkamer</label>
+                        <input type="hidden" name="PrivateBathroom" value="false" />
+                    </div>
+                }
+                else
+                {
+                    <h5>Gîte Opties</h5>
+                    <div class="form-check mb-2">
+                        <input type="checkbox" name="EntireProperty" value="true" class="form-check-input" @(Model.EntireProperty ? "checked" : "") />
+                        <label class="form-check-label">Gehele woning</label>
+                        <input type="hidden" name="EntireProperty" value="false" />
+                    </div>
+                    <div class="form-check mb-2">
+                        <input type="checkbox" name="Garden" value="true" class="form-check-input" @(Model.Garden ? "checked" : "") />
+                        <label class="form-check-label">Tuin</label>
+                        <input type="hidden" name="Garden" value="false" />
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="ParkingAvailable" value="true" class="form-check-input" @(Model.ParkingAvailable ? "checked" : "") />
+                        <label class="form-check-label">Parkeerplaats</label>
+                        <input type="hidden" name="ParkingAvailable" value="false" />
+                    </div>
+                }
+
+                <h5 class="mt-4">Beddenconfiguratie</h5>
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Bed Type</th>
+                            <th style="width: 100px;">Aantal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.BedTypes.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Model.BedTypes[i].BedName
+                                    <input type="hidden" name="BedTypes[@i].BedId" value="@Model.BedTypes[i].BedId" />
+                                    <input type="hidden" name="BedTypes[@i].BedName" value="@Model.BedTypes[i].BedName" />
+                                </td>
+                                <td>
+                                    <input type="number" name="BedTypes[@i].Quantity" value="@Model.BedTypes[i].Quantity" class="form-control" min="0" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Wijzigingen opslaan</button>
+            <a href="/Admins/Accommodations" class="btn btn-secondary">Annuleren</a>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,43 @@
+﻿@using LeMarconnes.DTOs.Admin
+@model IEnumerable<AdminReservationDto>
+
+@{
+    ViewData["Title"] = "Beheer Reserveringen";
+    Layout = "_Layout";
+}
+
+<div class="container my-5">
+    <h2 class="serif mb-4">LeMarconnes Beheer: Reserveringen</h2>
+
+    <div class="table-responsive bg-white shadow-sm p-3">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Accommodatie</th>
+                    <th>Gast ID</th>
+                    <th>Status</th>
+                    <th class="text-end">Acties</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>#@item.Id</td>
+                        <td>@(item.Accommodation?.Name ?? "Onbekend")</td>
+                        <td class="small">@item.UserId</td>
+                        <td>
+                            <span class="badge @(item.Status?.Id == 3 ? "bg-success" : "bg-warning text-dark") rounded-0">
+                                @(item.Status?.Name ?? "Onbekend")
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <a href="/Admins/Reservations/Details/@item.Id" class="btn btn-sm btn-outline-dark rounded-0">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

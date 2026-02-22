@@ -1,0 +1,174 @@
+﻿@model LeMarconnes.Models.AccommodationCreateViewModel
+
+@{
+    ViewData["Title"] = "Nieuwe Accommodatie";
+}
+
+<div class="container py-4">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger shadow-sm border-start border-4 border-danger">
+            <h5 class="serif"><i class="bi bi-exclamation-triangle-fill me-2"></i>Validatie Fouten:</h5>
+            <ul class="mb-0">
+                @foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    @foreach (var error in modelState.Errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="serif">Nieuwe Accommodatie</h2>
+        <a href="/Admins/Accommodations" class="btn btn-outline-secondary rounded-0">Terug</a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post" id="accommodationForm">
+                @Html.AntiForgeryToken()
+
+                <h5 class="serif text-muted mb-3">Type Accommodatie</h5>
+                <div class="mb-4">
+                    <div class="btn-group w-100" role="group">
+                        <input type="radio" class="btn-check" name="SelectedType" id="btnHotel" value="hotel" @(Model.SelectedType == "hotel" ? "checked" : "") autocomplete="off">
+                        <label class="btn btn-outline-dark py-2" for="btnHotel">Hotelkamer</label>
+
+                        <input type="radio" class="btn-check" name="SelectedType" id="btnGite" value="gite" @(Model.SelectedType == "gite" ? "checked" : "") autocomplete="off">
+                        <label class="btn btn-outline-dark py-2" for="btnGite">Gîte</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    @* --- Linker kolom: Algemene info --- *@
+                    <div class="col-md-6 border-end">
+                        <h5 class="serif text-muted mb-3">Algemeen</h5>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Naam</label>
+                            <input type="text" name="Name" class="form-control" value="@Model.Name" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Beschrijving</label>
+                            <textarea name="Description" class="form-control" rows="5">@Model.Description</textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Prijs / nacht (€)</label>
+                                <input type="number" step="0.01" name="RatePerNight" class="form-control" value="@Model.RatePerNight.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Capaciteit</label>
+                                <input type="number" name="Capacity" class="form-control" value="@Model.Capacity" />
+                            </div>
+                        </div>
+                    </div>
+
+                    @* --- Rechter kolom: Specificaties & Bedden --- *@
+                    <div class="col-md-6 ps-md-4">
+                        @* Hotel Sectie *@
+                        <div id="sectionHotel">
+                            <h5 class="serif text-muted mb-3">Hotel Specificaties</h5>
+                            <div class="card bg-light border-0 p-3 mb-4">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Kamernummer</label>
+                                    <input type="number" name="RoomNumber" class="form-control" value="@Model.RoomNumber" />
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input name="PrivateBathroom" value="true" class="form-check-input" type="checkbox" role="switch" @(Model.PrivateBathroom ? "checked" : "") />
+                                    <input name="PrivateBathroom" value="false" type="hidden" />
+                                    <label class="form-check-label">Eigen Badkamer</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Gite Sectie (nu inclusief Parking) *@
+                        <div id="sectionGite" class="d-none">
+                            <h5 class="serif text-muted mb-3">Gîte Specificaties</h5>
+                            <div class="card bg-light border-0 p-3 mb-4">
+                                <div class="form-check form-switch mb-2">
+                                    <input name="EntireProperty" value="true" class="form-check-input" type="checkbox" @(Model.EntireProperty ? "checked" : "") />
+                                    <input name="EntireProperty" value="false" type="hidden" />
+                                    <label class="form-check-label">Gehele woning</label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input name="Garden" value="true" class="form-check-input" type="checkbox" @(Model.Garden ? "checked" : "") />
+                                    <input name="Garden" value="false" type="hidden" />
+                                    <label class="form-check-label">Privé Tuin</label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input name="ParkingAvailable" value="true" class="form-check-input" type="checkbox" @(Model.ParkingAvailable ? "checked" : "") />
+                                    <input name="ParkingAvailable" value="false" type="hidden" />
+                                    <label class="form-check-label">Parkeren bij accommodatie</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 class="serif text-muted mb-3">Slaapplaatsen</h5>
+                        <table class="table table-sm border">
+                            <thead class="table-light">
+                                <tr><th>Type</th><th style="width: 100px;">Aantal</th></tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.BedTypes.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Model.BedTypes[i].BedName
+                                            <input type="hidden" name="BedTypes[@i].BedId" value="@Model.BedTypes[i].BedId" />
+                                            <input type="hidden" name="BedTypes[@i].BedName" value="@Model.BedTypes[i].BedName" />
+                                        </td>
+                                        <td>
+                                            <input type="number" name="BedTypes[@i].Quantity" class="form-control form-control-sm text-center" value="@Model.BedTypes[i].Quantity" min="0" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-dark btn-lg rounded-0 fw-bold">OPSLAAN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const radios = document.querySelectorAll('input[name="SelectedType"]');
+            const sectionHotel = document.getElementById('sectionHotel');
+            const sectionGite = document.getElementById('sectionGite');
+
+            function toggleSections() {
+                const checkedElement = document.querySelector('input[name="SelectedType"]:checked');
+                if(!checkedElement) return;
+
+                const checkedValue = checkedElement.value;
+                if (checkedValue === 'hotel') {
+                    sectionHotel.classList.remove('d-none');
+                    sectionGite.classList.add('d-none');
+                } else {
+                    sectionHotel.classList.add('d-none');
+                    sectionGite.classList.remove('d-none');
+                }
+            }
+
+            radios.forEach(r => r.addEventListener('change', toggleSections));
+
+            // Fix voor Bootstrap btn-group labels die soms de radio-change event niet direct triggeren
+            document.querySelectorAll('.btn-group label').forEach(l => {
+                l.addEventListener('click', () => setTimeout(toggleSections, 50));
+            });
+
+            toggleSections();
+        });
+    </script>
+}

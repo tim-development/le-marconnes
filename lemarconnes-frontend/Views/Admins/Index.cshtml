@@ -1,0 +1,108 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Admin Dashboard - LeMarconnes";
+    var userName = Context.Session.GetString("UserName") ?? "Beheerder";
+}
+
+<style>
+    .admin-hero {
+        background-color: #333; /* Overeenkomstig met je login */
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 40px;
+    }
+
+    .stat-card {
+        background: white;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        border-radius: 0;
+        padding: 30px;
+        transition: 0.3s;
+        height: 100%;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+    .admin-badge {
+        background-color: #c5a059; /* LeMarconnes Goud */
+        color: white;
+        padding: 5px 15px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+</style>
+
+<div class="admin-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <span class="admin-badge mb-2 d-inline-block">Beheerder</span>
+                <h1 class="serif display-5 mb-0">Welkom terug, @userName</h1>
+                <p class="lead mb-0">Beheerpaneel van Domaine LeMarconnes</p>
+            </div>
+            <div>
+                <a href="/" class="btn btn-outline-light rounded-0">Website bekijken</a>
+                @* Gebruik een formulier voor veilig uitloggen als de actie een Post is *@
+                <a href="/Admins/Logout" class="btn btn-danger rounded-0 ms-2">Uitloggen</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="fs-1 mb-3">🏡</div>
+                <h4 class="serif">Accommodaties</h4>
+                <p class="text-muted small">Beheer gîtes en hotelkamers</p>
+                <a href="/Admins/Accommodations" class="btn btn-outline-dark btn-sm rounded-0">Bekijk overzicht</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="fs-1 mb-3">📅</div>
+                <h4 class="serif">Reserveringen</h4>
+                <p class="text-muted small">Bekijk binnengekomen reserveringen</p>
+                <a href="/Admins/Reservations" class="btn btn-outline-dark btn-sm rounded-0">Bekijk reserveringen</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="fs-1 mb-3">👤</div>
+                <h4 class="serif">Gebruikers</h4>
+                <p class="text-muted small">Beheer gebruikers</p>
+                <a href="/Admins/Users/Create" class="btn btn-outline-dark btn-sm rounded-0">Maak Gebruiker</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 p-4 border bg-white shadow-sm">
+        <h5 class="serif border-bottom pb-2 mb-3">Systeem Status</h5>
+        <div class="row text-center">
+            <div class="col-md-3">
+                <small class="text-muted d-block">Project</small>
+                <strong>LeMarconnes</strong>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block">Omgeving</small>
+                <span class="text-success">Live API (Connected)</span>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block">Server</small>
+                <span>DuckDNS Duckman</span>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block">Huidige Sessie</small>
+                <span>@DateTime.Now.ToString("dd-MM-yyyy HH:mm")</span>
+            </div>
+        </div>
+    </div>
+</div>
